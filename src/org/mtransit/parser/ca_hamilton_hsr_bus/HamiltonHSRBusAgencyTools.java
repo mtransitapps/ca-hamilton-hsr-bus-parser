@@ -396,8 +396,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return MSpec.cleanLabel(gStopName);
 	}
 
-	private static final String STOP_ID_0 = "0";
-	private static final String STOP_ID_MERGED_9655 = "_merged_9655";
+	private static final Pattern STOP_ID_MERGED = Pattern.compile("(([0-9]*)_merged_([0-9]*))", Pattern.CASE_INSENSITIVE);
+	private static final String STOP_ID_MERGED_REPLACEMENT = "$2";
 
 	@Override
 	public int getStopId(GStop gStop) {
@@ -406,7 +406,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			if (Utils.isDigitsOnly(stopId)) {
 				return Integer.valueOf(stopId);
 			}
-			stopId = stopId.replaceAll(STOP_ID_MERGED_9655, STOP_ID_0);
+			stopId = STOP_ID_MERGED.matcher(stopId).replaceAll(STOP_ID_MERGED_REPLACEMENT);
 			if (Utils.isDigitsOnly(stopId)) {
 				return Integer.valueOf(stopId);
 			}
