@@ -74,7 +74,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
-		return Long.parseLong(gRoute.route_short_name);
+		return Long.parseLong(gRoute.getRouteShortName());
 	}
 
 	private static final String ROUTE_SN_52A = "52A";
@@ -82,15 +82,15 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String getRouteShortName(GRoute gRoute) {
-		if (ROUTE_ID_52.equals(gRoute.route_short_name)) {
+		if (ROUTE_ID_52.equals(gRoute.getRouteShortName())) {
 			return ROUTE_SN_52A;
 		}
-		return String.valueOf(Integer.valueOf(gRoute.route_short_name));
+		return String.valueOf(Integer.valueOf(gRoute.getRouteShortName()));
 	}
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
-		return CleanUtils.cleanLabel(gRoute.route_long_name.toLowerCase(Locale.ENGLISH));
+		return CleanUtils.cleanLabel(gRoute.getRouteLongName().toLowerCase(Locale.ENGLISH));
 	}
 
 	private static final String AGENCY_COLOR = "F4CB0B"; // YELLOW (flag)
@@ -103,7 +103,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
 		if (mRoute.id == 1l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -111,7 +111,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 2l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -119,7 +119,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 3l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -127,7 +127,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 4l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -135,7 +135,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 5l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -143,7 +143,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 6l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -151,7 +151,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 7l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -159,7 +159,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 8l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -167,7 +167,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 9l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			} else {
@@ -175,7 +175,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 10l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -183,7 +183,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 11l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -191,7 +191,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 12l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			} else {
@@ -199,7 +199,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 16l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -207,7 +207,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 18l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			} else {
@@ -215,7 +215,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 20l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -223,7 +223,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 21l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -231,7 +231,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 22l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -239,7 +239,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 23l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -247,7 +247,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 24l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -255,7 +255,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 25l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -263,7 +263,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 26l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -271,7 +271,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 27l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -279,7 +279,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 33l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -287,7 +287,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 34l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -295,7 +295,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 35l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -303,7 +303,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 41l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -311,7 +311,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 43l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -319,7 +319,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 44l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -327,7 +327,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 51l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			} else {
@@ -335,7 +335,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 52l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			} else {
@@ -343,7 +343,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 55l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -351,7 +351,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 56l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			} else {
@@ -359,7 +359,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 58l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			} else {
@@ -367,7 +367,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		} else if (mRoute.id == 99l) {
-			if (gTrip.direction_id == 0) {
+			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			} else {
@@ -375,7 +375,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return;
 			}
 		}
-		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.trip_headsign), gTrip.direction_id);
+		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), gTrip.getDirectionId());
 		System.out.println("Unexpected trip headsign for " + mTrip + " !");
 		System.exit(-1);
 	}
@@ -402,7 +402,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public int getStopId(GStop gStop) {
-		String stopId = gStop.stop_id;
+		String stopId = gStop.getStopId();
 		if (stopId != null && stopId.length() > 0) {
 			if (Utils.isDigitsOnly(stopId)) {
 				return Integer.valueOf(stopId);
