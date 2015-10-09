@@ -102,7 +102,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
-		if (mRoute.id == 1l) {
+		if (mRoute.getId() == 1l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -110,7 +110,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 2l) {
+		} else if (mRoute.getId() == 2l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -118,7 +118,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 3l) {
+		} else if (mRoute.getId() == 3l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -126,7 +126,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 4l) {
+		} else if (mRoute.getId() == 4l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -134,7 +134,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 5l) {
+		} else if (mRoute.getId() == 5l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -142,7 +142,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 6l) {
+		} else if (mRoute.getId() == 6l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -150,7 +150,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 7l) {
+		} else if (mRoute.getId() == 7l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -158,7 +158,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 8l) {
+		} else if (mRoute.getId() == 8l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -166,7 +166,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 9l) {
+		} else if (mRoute.getId() == 9l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
@@ -174,7 +174,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			}
-		} else if (mRoute.id == 10l) {
+		} else if (mRoute.getId() == 10l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -182,7 +182,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 11l) {
+		} else if (mRoute.getId() == 11l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -190,7 +190,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 12l) {
+		} else if (mRoute.getId() == 12l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
@@ -198,7 +198,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			}
-		} else if (mRoute.id == 16l) {
+		} else if (mRoute.getId() == 16l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -206,7 +206,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 18l) {
+		} else if (mRoute.getId() == 18l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
@@ -214,7 +214,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			}
-		} else if (mRoute.id == 20l) {
+		} else if (mRoute.getId() == 20l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -222,7 +222,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 21l) {
+		} else if (mRoute.getId() == 21l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -230,7 +230,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 22l) {
+		} else if (mRoute.getId() == 22l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -238,7 +238,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 23l) {
+		} else if (mRoute.getId() == 23l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -246,7 +246,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 24l) {
+		} else if (mRoute.getId() == 24l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -254,7 +254,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 25l) {
+		} else if (mRoute.getId() == 25l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -262,7 +262,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 26l) {
+		} else if (mRoute.getId() == 26l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -270,7 +270,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 27l) {
+		} else if (mRoute.getId() == 27l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -278,7 +278,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 33l) {
+		} else if (mRoute.getId() == 33l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -286,7 +286,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 34l) {
+		} else if (mRoute.getId() == 34l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -294,7 +294,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 35l) {
+		} else if (mRoute.getId() == 35l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -302,7 +302,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 41l) {
+		} else if (mRoute.getId() == 41l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -310,7 +310,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 43l) {
+		} else if (mRoute.getId() == 43l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -318,7 +318,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 44l) {
+		} else if (mRoute.getId() == 44l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -326,7 +326,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 51l) {
+		} else if (mRoute.getId() == 51l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
@@ -334,7 +334,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
 			}
-		} else if (mRoute.id == 52l) {
+		} else if (mRoute.getId() == 52l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
@@ -342,7 +342,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
 			}
-		} else if (mRoute.id == 55l) {
+		} else if (mRoute.getId() == 55l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -350,7 +350,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 56l) {
+		} else if (mRoute.getId() == 56l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
@@ -358,7 +358,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.SOUTH);
 				return;
 			}
-		} else if (mRoute.id == 58l) {
+		} else if (mRoute.getId() == 58l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -366,7 +366,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignDirection(MDirectionType.WEST);
 				return;
 			}
-		} else if (mRoute.id == 99l) {
+		} else if (mRoute.getId() == 99l) {
 			if (gTrip.getDirectionId() == 0) {
 				mTrip.setHeadsignDirection(MDirectionType.NORTH);
 				return;
@@ -376,22 +376,21 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		}
 		mTrip.setHeadsignString(cleanTripHeadsign(gTrip.getTripHeadsign()), gTrip.getDirectionId());
-		System.out.println("Unexpected trip headsign for " + mTrip + " !");
+		System.out.printf("\nUnexpected trip headsign for %s!\n", mTrip);
 		System.exit(-1);
 	}
 
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
-		return CleanUtils.cleanLabel(tripHeadsign.toLowerCase(Locale.ENGLISH));
+		tripHeadsign = tripHeadsign.toLowerCase(Locale.ENGLISH);
+		return CleanUtils.cleanLabel(tripHeadsign);
 	}
 
-	private static final Pattern AT = Pattern.compile("( at )", Pattern.CASE_INSENSITIVE);
-	private static final String AT_REPLACEMENT = " / ";
 
 	@Override
 	public String cleanStopName(String gStopName) {
 		gStopName = gStopName.toLowerCase(Locale.ENGLISH);
-		gStopName = AT.matcher(gStopName).replaceAll(AT_REPLACEMENT);
+		gStopName = CleanUtils.CLEAN_AT.matcher(gStopName).replaceAll(CleanUtils.CLEAN_AT_REPLACEMENT);
 		gStopName = CleanUtils.cleanStreetTypes(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
 		return CleanUtils.cleanLabel(gStopName);
