@@ -101,6 +101,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return AGENCY_COLOR;
 	}
 
+	private static final Pattern VIA = Pattern.compile("((^|\\W){1}(via)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
 		if (mRoute.getId() == 18l) {
@@ -210,7 +212,10 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return true;
 			}
 		} else if (mTrip.getRouteId() == 43l) {
-			if (mTrip.getHeadsignId() == 1) {
+			if (mTrip.getHeadsignId() == 0) {
+				mTrip.setHeadsignString("Highland @ Saltfleet HS", mTrip.getHeadsignId());
+				return true;
+			} else if (mTrip.getHeadsignId() == 1) {
 				mTrip.setHeadsignString(MEADOWLANDS, mTrip.getHeadsignId());
 				return true;
 			}
