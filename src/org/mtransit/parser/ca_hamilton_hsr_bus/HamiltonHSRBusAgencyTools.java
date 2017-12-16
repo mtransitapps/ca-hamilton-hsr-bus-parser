@@ -73,8 +73,13 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
 
+	private static final String RSN_STM = "STM";
+
 	@Override
 	public long getRouteId(GRoute gRoute) {
+		if (RSN_STM.equals(gRoute.getRouteShortName())) {
+			return 100001L;
+		}
 		return Long.parseLong(gRoute.getRouteShortName());
 	}
 
@@ -304,8 +309,6 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return CleanUtils.cleanLabel(gStopName);
 	}
 
-	private static final Pattern STOP_ID_MERGED = Pattern.compile("(([0-9]*)_merged_([0-9]*))", Pattern.CASE_INSENSITIVE);
-	private static final String STOP_ID_MERGED_REPLACEMENT = "$2";
 
 	@Override
 	public int getStopId(GStop gStop) {
@@ -314,7 +317,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			if (Utils.isDigitsOnly(stopId)) {
 				return Integer.valueOf(stopId);
 			}
-			stopId = STOP_ID_MERGED.matcher(stopId).replaceAll(STOP_ID_MERGED_REPLACEMENT);
+			stopId = CleanUtils.cleanMergedID(stopId);
 			if (Utils.isDigitsOnly(stopId)) {
 				return Integer.valueOf(stopId);
 			}
