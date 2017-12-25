@@ -1,6 +1,8 @@
 package org.mtransit.parser.ca_hamilton_hsr_bus;
 
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,23 +77,22 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	private static final String RSN_STM = "STM";
 
+	private static final long RID_STM = 100001L;
+
 	@Override
 	public long getRouteId(GRoute gRoute) {
 		if (RSN_STM.equals(gRoute.getRouteShortName())) {
-			return 100001L;
+			return RID_STM;
 		}
 		return Long.parseLong(gRoute.getRouteShortName());
 	}
 
-	private static final String ROUTE_SN_52A = "52A";
-	private static final String ROUTE_ID_52 = "52";
-
 	@Override
 	public String getRouteShortName(GRoute gRoute) {
-		if (ROUTE_ID_52.equals(gRoute.getRouteShortName())) {
-			return ROUTE_SN_52A;
+		if (Utils.isDigitsOnly(gRoute.getRouteShortName())) {
+			return String.valueOf(Integer.valueOf(gRoute.getRouteShortName()));
 		}
-		return String.valueOf(Integer.valueOf(gRoute.getRouteShortName()));
+		return super.getRouteShortName(gRoute);
 	}
 
 	@Override
@@ -137,10 +138,13 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final String FIESTA_MALL = "Fiesta Mall";
 	private static final String GAGE = "Gage";
 	private static final String GLANCASTER_LOOP = "Glancaster Loop";
+	private static final String GREENE_SHORT = "Grn";
 	private static final String HAMILTON_GO_CENTER = "Hamilton GO Ctr";
+	private static final String HIGH_SCHOOL_SHORT = "HS"; // High School
 	private static final String INDUSTRIAL = "Industrial";
 	private static final String HAMILTON_AIRPORT_SHORT = "Airport"; // Hamilton
 	private static final String HAMILTON_WATERFRONT_SHORT = "Waterfront"; // Hamilton
+	private static final String HERITAGE = "Heritage";
 	private static final String HIGHWAY_8 = "Hwy 8";
 	private static final String JONES = "Jones";
 	private static final String PLEASANT = "Pleasant";
@@ -156,92 +160,198 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
-		if (mTrip.getRouteId() == 1l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(FIESTA_MALL, mTrip.getHeadsignId());
+		List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
+		if (mTrip.getRouteId() == 1L) {
+			if (Arrays.asList( //
+					"1a University Plz", //
+					"Hamilton Go Ctr" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Hamilton Go Ctr", mTrip.getHeadsignId());
 				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(HAMILTON_GO_CENTER, mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == 4l) {
-			if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(DOWNTOWN, mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == 5l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(WEST, mTrip.getHeadsignId()); // TODO?
-				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(EAST, mTrip.getHeadsignId()); // TODO?
+			} else if (Arrays.asList( //
+					"Downtown", //
+					"Eastgate Sq", //
+					"Fiesta Mall" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Fiesta Mall", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 10l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(EASTGATE_SQUARE, mTrip.getHeadsignId());
+		} else if (mTrip.getRouteId() == 5L) {
+			if (Arrays.asList( //
+					"Downtown", // same
+					"5a Greenhill @ Cochrane", //
+					"5e Quigley @ Greenhill", //
+					"Jones @ King", //
+					EAST //
+					).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString(EAST, mTrip.getHeadsignId());
+				return true;
+			} else if (Arrays.asList( //
+					// 52 Head St / 52 Pirie @ Governors / West Hamilton Loop / 5c Meadowlands / 5c West Hamilton Loop / Downtown
+					"Downtown", // same
+					"52 Head St", //
+					"52 Pirie @ Governors", //
+					"5c Meadowlands", //
+					"5c West Hamilton Loop", //
+					"West Hamilton Loop", //
+					WEST //
+					).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString(WEST, mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 20l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(HAMILTON_AIRPORT_SHORT, mTrip.getHeadsignId());
-				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(HAMILTON_WATERFRONT_SHORT + AT + PIER_8, mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == 22l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(UPPER_OTTAWA + AT + RYMAL, mTrip.getHeadsignId());
+		} else if (mTrip.getRouteId() == 10L) {
+			if (Arrays.asList( //
+					"Downtown", //
+					"Eastgate Sq" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Eastgate Sq", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 34l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(GLANCASTER_LOOP, mTrip.getHeadsignId());
+		} else if (mTrip.getRouteId() == 20L) {
+			if (Arrays.asList( //
+					"Mtn TC P&R", //
+					"Waterfront @ Pier 8" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Waterfront @ Pier 8", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 35l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(ST_ELIZABETH_VILLAGE, mTrip.getHeadsignId());
-				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(MAC_NAB_TRANSIT_TERMINAL, mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == 41l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(MEADOWLANDS, mTrip.getHeadsignId());
-				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(GAGE + AT + INDUSTRIAL, mTrip.getHeadsignId());
+		} else if (mTrip.getRouteId() == 21L) {
+			if (Arrays.asList( //
+					"Fennell @ West 5th", //
+					"MacNab TT" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 43l) {
-			if (mTrip.getHeadsignId() == 0) {
+		} else if (mTrip.getRouteId() == 23L) {
+			if (Arrays.asList( //
+					"Upper Gage @ Mohawk", //
+					"MacNab TT" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
+				return true;
+			} else if (Arrays.asList( //
+					"Upper Gage @ Rymal", //
+					"Rymal @ Upper Gage" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Rymal @ Upper Gage", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 24L) {
+			if (Arrays.asList( //
+					"Upper Sherman @ Mohawk", //
+					"MacNab TT" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 33L) {
+			if (Arrays.asList( //
+					"Fennell @ West 5th", //
+					"MacNab TT" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 34L) {
+			if (Arrays.asList( //
+					"34a Upper Horning Loop", //
+					"Glancaster & Upper Horning Loops", //
+					"Glancaster Loop" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Glancaster Loop", mTrip.getHeadsignId()); // TODO ?
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 35L) {
+			if (Arrays.asList( //
+					"Mohawk College", //
+					"St Elizabeth Vlg" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("St Elizabeth Vlg", mTrip.getHeadsignId());
+				return true;
+			} else if (Arrays.asList( //
+					"John @ Jackson", //
+					"MacNab Terminal", //
+					"MacNab TT" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 41L) {
+			if (Arrays.asList( //
+					"41a Chedoke Hosp", //
+					"Mohawk @ Garth", //
+					"Meadowlands" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Meadowlands", mTrip.getHeadsignId());
+				return true;
+			} else if (Arrays.asList( //
+					"Mohawk @ Upper James", //
+					"Mohawk @ Upper Gage", //
+					"Lime Rdg Mall", //
+					"Gage @ Industrial" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Gage @ Industrial", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 43L) {
+			if (Arrays.asList( //
+					"Lime Rdg Mall", // same
+					"Meadowlands" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Meadowlands", mTrip.getHeadsignId());
+				return true;
+			} else if (Arrays.asList( //
+					"Lime Rdg Mall", // same
+					"Highland @ Saltfleet HS" //
+			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Highland @ Saltfleet HS", mTrip.getHeadsignId());
 				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(MEADOWLANDS, mTrip.getHeadsignId());
+			}
+		} else if (mTrip.getRouteId() == 44L) {
+			if (Arrays.asList( //
+					"Rymal @ Upper James", //
+					"Eastgate Sq" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Eastgate Sq", mTrip.getHeadsignId());
+				return true;
+			} else if (Arrays.asList( //
+					"Rymal @ Upper James", //
+					"Glancaster Loop", //
+					"Ancaster Business Pk" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Ancaster Business Pk", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 44l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(ANCASTER_BUSINESS_PK, mTrip.getHeadsignId());
-				return true;
-			} else if (mTrip.getHeadsignId() == 1) {
-				mTrip.setHeadsignString(EASTGATE_SQUARE, mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == 52l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(ORCHARD + AT + PLEASANT, mTrip.getHeadsignId());
+		} else if (mTrip.getRouteId() == 52L) {
+			if (Arrays.asList( //
+					"Ogilvie @ Governors", //
+					"Orchard @ Pleasant" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Orchard @ Pleasant", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 55l) {
-			if (mTrip.getHeadsignId() == 0) {
-				mTrip.setHeadsignString(JONES + AT + HIGHWAY_8, mTrip.getHeadsignId());
+		} else if (mTrip.getRouteId() == 55L) {
+			if (Arrays.asList( //
+					"55a Levi Loop", //
+					"Jones @ Hwy 8" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Jones @ Hwy 8", mTrip.getHeadsignId());
 				return true;
 			}
+		} else if (mTrip.getRouteId() == RID_STM) {
+			if (Arrays.asList( //
+					"Rymal @ Upper James", //
+					"Scenic Loop", //
+					"Upper Paradise @ Mohawk", //
+					"St Thomas More HS PM" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("St Thomas More HS PM", mTrip.getHeadsignId());
+				return true;
+			}
+		}
+		if (isGoodEnoughAccepted()) {
+			return super.mergeHeadsign(mTrip, mTripToMerge);
 		}
 		System.out.printf("\nUnexpected trips to merge %s & %s\n", mTrip, mTripToMerge);
 		System.exit(-1);
@@ -280,6 +390,15 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final Pattern TRANSIT_TERMINAL = Pattern.compile("((^|\\W){1}(transit terminal)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
 	private static final String TRANSIT_TERMINAL_REPLACEMENT = "$2" + TRANSIT_TERMINAL_SHORT + "$4";
 
+	private static final Pattern HIGH_SCHOOL_ = Pattern.compile("((^|\\W){1}(high school)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String HIGH_SCHOOL_REPLACEMENT = "$2" + HIGH_SCHOOL_SHORT + "$4";
+
+	private static final Pattern GREENE_ = Pattern.compile("((^|\\W){1}(greene)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String GREENE_REPLACEMENT = "$2" + GREENE_SHORT + "$4";
+
+	private static final Pattern HERITAGE_ = Pattern.compile("((^|\\W){1}(Heratige)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String HERITAGE_REPLACEMENT = "$2" + HERITAGE + "$4";
+
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
 		tripHeadsign = tripHeadsign.toLowerCase(Locale.ENGLISH);
@@ -292,7 +411,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = SALTFLEET_SCHOOL.matcher(tripHeadsign).replaceAll(SALTFLEET_SCHOOL_REPLACEMENT);
 		tripHeadsign = TRANSIT_CENTRE.matcher(tripHeadsign).replaceAll(TRANSIT_CENTRE_REPLACEMENT);
 		tripHeadsign = TRANSIT_TERMINAL.matcher(tripHeadsign).replaceAll(TRANSIT_TERMINAL_REPLACEMENT);
+		tripHeadsign = GREENE_.matcher(tripHeadsign).replaceAll(GREENE_REPLACEMENT);
+		tripHeadsign = HERITAGE_.matcher(tripHeadsign).replaceAll(HERITAGE_REPLACEMENT);
+		tripHeadsign = HIGH_SCHOOL_.matcher(tripHeadsign).replaceAll(HIGH_SCHOOL_REPLACEMENT);
 		tripHeadsign = CleanUtils.CLEAN_AT.matcher(tripHeadsign).replaceAll(CleanUtils.CLEAN_AT_REPLACEMENT);
+		tripHeadsign = CleanUtils.CLEAN_AND.matcher(tripHeadsign).replaceAll(CleanUtils.CLEAN_AND_REPLACEMENT);
 		tripHeadsign = CleanUtils.cleanStreetTypes(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanNumbers(tripHeadsign);
 		tripHeadsign = CleanUtils.removePoints(tripHeadsign);
@@ -308,7 +431,6 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		gStopName = CleanUtils.cleanNumbers(gStopName);
 		return CleanUtils.cleanLabel(gStopName);
 	}
-
 
 	@Override
 	public int getStopId(GStop gStop) {
