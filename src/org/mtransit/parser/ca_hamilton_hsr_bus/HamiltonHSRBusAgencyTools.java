@@ -21,7 +21,7 @@ import org.mtransit.parser.mt.data.MDirectionType;
 import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
 
-// http://www.hamilton.ca/ProjectsInitiatives/OpenData/
+// https://www.hamilton.ca/city-initiatives/strategies-actions/open-data-program
 // http://googlehsr.hamilton.ca/latest/google_transit.zip
 public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
