@@ -76,13 +76,18 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	private static final String RSN_STM = "STM";
+	private static final String RSN_TC = "TC";
 
 	private static final long RID_STM = 100001L;
+	private static final long RID_TC = 100002L;
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
 		if (RSN_STM.equals(gRoute.getRouteShortName())) {
 			return RID_STM;
+		}
+		if (RSN_TC.equals(gRoute.getRouteShortName())) {
+			return RID_TC;
 		}
 		return Long.parseLong(gRoute.getRouteShortName());
 	}
@@ -111,7 +116,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
-		if (mRoute.getId() == 18l) {
+		if (mRoute.getId() == 18L) {
 			if (gTrip.getTripHeadsign().toLowerCase(Locale.ENGLISH).endsWith("eastbound")) {
 				mTrip.setHeadsignDirection(MDirectionType.EAST);
 				return;
@@ -129,33 +134,14 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		mTrip.setHeadsignString(cleanTripHeadsign(tripHeadsign), gTrip.getDirectionId());
 	}
 
-	private static final String AT = " @ ";
 	private static final String TRANSIT_TERMINAL_SHORT = "TT"; // Transit Terminal
-	private static final String ANCASTER_BUSINESS_PK = "Ancaster Business Pk";
-	private static final String DOWNTOWN = "Downtown";
 	private static final String EAST = "East";
-	private static final String EASTGATE_SQUARE = "Eastgate Sq";
-	private static final String FIESTA_MALL = "Fiesta Mall";
-	private static final String GAGE = "Gage";
-	private static final String GLANCASTER_LOOP = "Glancaster Loop";
 	private static final String GREENE_SHORT = "Grn";
-	private static final String HAMILTON_GO_CENTER = "Hamilton GO Ctr";
 	private static final String HIGH_SCHOOL_SHORT = "HS"; // High School
-	private static final String INDUSTRIAL = "Industrial";
 	private static final String HAMILTON_AIRPORT_SHORT = "Airport"; // Hamilton
 	private static final String HAMILTON_WATERFRONT_SHORT = "Waterfront"; // Hamilton
 	private static final String HERITAGE = "Heritage";
-	private static final String HIGHWAY_8 = "Hwy 8";
-	private static final String JONES = "Jones";
-	private static final String PLEASANT = "Pleasant";
 	private static final String MAC_NAB = "MacNab";
-	private static final String MAC_NAB_TRANSIT_TERMINAL = MAC_NAB + " " + TRANSIT_TERMINAL_SHORT;
-	private static final String MEADOWLANDS = "Meadowlands";
-	private static final String ORCHARD = "Orchard";
-	private static final String PIER_8 = "Pier 8";
-	private static final String RYMAL = "Rymal";
-	private static final String ST_ELIZABETH_VILLAGE = "St Elizabeth Vlg";
-	private static final String UPPER_OTTAWA = "Upper Ottawa";
 	private static final String WEST = "West";
 
 	@Override
@@ -421,7 +407,6 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = CleanUtils.removePoints(tripHeadsign);
 		return CleanUtils.cleanLabel(tripHeadsign);
 	}
-
 
 	@Override
 	public String cleanStopName(String gStopName) {
