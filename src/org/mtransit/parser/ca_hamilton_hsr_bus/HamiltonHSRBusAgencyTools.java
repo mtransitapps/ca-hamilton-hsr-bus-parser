@@ -84,9 +84,15 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	private static final String RSN_STM = "STM";
 	private static final String RSN_TC = "TC";
+	private static final String RSN_PEACH = "PEACH";
+	private static final String RSN_CAN = "CAN";
+	private static final String RSN_FOF = "FOF";
 
-	private static final long RID_STM = 100001L;
-	private static final long RID_TC = 100002L;
+	private static final long RID_STM = 100_001L;
+	private static final long RID_TC = 100_002L;
+	private static final long RID_PEACH = 100_003L;
+	private static final long RID_CAN = 100_004L;
+	private static final long RID_FOF = 100_005L;
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
@@ -95,6 +101,15 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		}
 		if (RSN_TC.equals(gRoute.getRouteShortName())) {
 			return RID_TC;
+		}
+		if (RSN_PEACH.equals(gRoute.getRouteShortName())) {
+			return RID_PEACH;
+		}
+		if (RSN_CAN.equals(gRoute.getRouteShortName())) {
+			return RID_CAN;
+		}
+		if (RSN_FOF.equals(gRoute.getRouteShortName())) {
+			return RID_FOF;
 		}
 		return Long.parseLong(gRoute.getRouteShortName());
 	}
@@ -398,9 +413,22 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("St Thomas More HS PM", mTrip.getHeadsignId());
 				return true;
 			}
-		}
-		if (isGoodEnoughAccepted()) {
-			return super.mergeHeadsign(mTrip, mTripToMerge);
+		} else if (mTrip.getRouteId() == RID_TC) {
+			if (Arrays.asList( //
+					"Ticat Post Game Shuttle", //
+					"Tim Hortons Field" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Tim Hortons Field", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == RID_CAN) {
+			if (Arrays.asList( //
+					"Bayfront Pk", //
+					"Waterfront" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Waterfront", mTrip.getHeadsignId());
+				return true;
+			}
 		}
 		System.out.printf("\nUnexpected trips to merge %s & %s\n", mTrip, mTripToMerge);
 		System.exit(-1);
