@@ -9,6 +9,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.Pair;
@@ -92,29 +93,54 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final String RSN_PEACH = "PEACH";
 	private static final String RSN_CAN = "CAN";
 	private static final String RSN_FOF = "FOF";
+	private static final String RSN_SHER = "SHER";
+	private static final String RSN_VAN = "VAN";
+	private static final String RSN_C_NEW = "C.NEW";
+	private static final String RSN_C_JDB = "S.JDB";
 
 	private static final long RID_STM = 100_001L;
 	private static final long RID_TC = 100_002L;
 	private static final long RID_PEACH = 100_003L;
 	private static final long RID_CAN = 100_004L;
 	private static final long RID_FOF = 100_005L;
+	private static final long RID_SHER = 100_006L;
+	private static final long RID_VAN = 100_007L;
+	private static final long RID_C_NEW = 100_008L;
+	private static final long RID_C_JDB = 100_009L;
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
-		if (RSN_STM.equals(gRoute.getRouteShortName())) {
-			return RID_STM;
-		}
-		if (RSN_TC.equals(gRoute.getRouteShortName())) {
-			return RID_TC;
-		}
-		if (RSN_PEACH.equals(gRoute.getRouteShortName())) {
-			return RID_PEACH;
-		}
-		if (RSN_CAN.equals(gRoute.getRouteShortName())) {
-			return RID_CAN;
-		}
-		if (RSN_FOF.equals(gRoute.getRouteShortName())) {
-			return RID_FOF;
+		if (!Utils.isDigitsOnly(gRoute.getRouteShortName())) {
+			if (RSN_STM.equals(gRoute.getRouteShortName())) {
+				return RID_STM;
+			}
+			if (RSN_TC.equals(gRoute.getRouteShortName())) {
+				return RID_TC;
+			}
+			if (RSN_PEACH.equals(gRoute.getRouteShortName())) {
+				return RID_PEACH;
+			}
+			if (RSN_CAN.equals(gRoute.getRouteShortName())) {
+				return RID_CAN;
+			}
+			if (RSN_FOF.equals(gRoute.getRouteShortName())) {
+				return RID_FOF;
+			}
+			if (RSN_SHER.equals(gRoute.getRouteShortName())) {
+				return RID_SHER;
+			}
+			if (RSN_VAN.equals(gRoute.getRouteShortName())) {
+				return RID_VAN;
+			}
+			if (RSN_C_NEW.equals(gRoute.getRouteShortName())) {
+				return RID_C_NEW;
+			}
+			if (RSN_C_JDB.equals(gRoute.getRouteShortName())) {
+				return RID_C_JDB;
+			}
+			System.out.printf("\nUnexpected route ID for %s\n", gRoute);
+			System.exit(-1);
+			return -1L;
 		}
 		return Long.parseLong(gRoute.getRouteShortName());
 	}
@@ -125,6 +151,20 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			return String.valueOf(Integer.valueOf(gRoute.getRouteShortName()));
 		}
 		return super.getRouteShortName(gRoute);
+	}
+
+	@Override
+	public String getRouteColor(GRoute gRoute) {
+		String routeColor = gRoute.getRouteColor();
+		if ("FFFF00".equalsIgnoreCase(routeColor)) { // YELLOW - too light
+			routeColor = "FFEA00"; // YELLOW - darker
+		}
+		if (StringUtils.isEmpty(routeColor)) {
+			System.out.printf("\nUnexpected route color for %s\n", gRoute);
+			System.exit(-1);
+			return null;
+		}
+		return routeColor;
 	}
 
 	@Override
@@ -247,18 +287,20 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		} else if (mTrip.getRouteId() == 5L) {
 			if (Arrays.asList( //
-					"Downtown", // same
+					"Downtown", // <>
 					"5a Greenhill @ Cochrane", //
 					"5e Quigley @ Greenhill", //
 					"Jones @ King", //
+					"Main @ MacNab", //
 					EAST //
 					).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString(EAST, mTrip.getHeadsignId());
 				return true;
 			} else if (Arrays.asList( //
-					// 52 Head St / 52 Pirie @ Governors / West Hamilton Loop / 5c Meadowlands / 5c West Hamilton Loop / Downtown
-					"Downtown", // same
+					"Downtown", // <>
+					"Meadowlands", //
 					"52 Head St", //
+					"52 To Head St", //
 					"52 Pirie @ Governors", //
 					"5c Meadowlands", //
 					"5c West Hamilton Loop", //
@@ -287,6 +329,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 21L) {
 			if (Arrays.asList( //
 					"Fennell @ West 5th", //
+					"Mohawk Collegw", //
+					"Mohawk College", //
 					"MacNab TT" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
@@ -309,6 +353,16 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 24L) {
 			if (Arrays.asList( //
 					"Upper Sherman @ Mohawk", //
+					"John @ Jackson", //
+					"MacNab TT" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 26L) {
+			if (Arrays.asList( //
+					"Rymal @ Upper Wellington Only", //
+					"King @ John", //
 					"MacNab TT" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
@@ -328,7 +382,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 					"Glancaster & Upper Horning Loops", //
 					"Glancaster Loop" //
 			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("Glancaster Loop", mTrip.getHeadsignId()); // TODO ?
+				mTrip.setHeadsignString("Glancaster Loop", mTrip.getHeadsignId());
 				return true;
 			}
 		} else if (mTrip.getRouteId() == 35L) {
@@ -365,13 +419,14 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		} else if (mTrip.getRouteId() == 43L) {
 			if (Arrays.asList( //
-					"Lime Rdg Mall", // same
+					"Lime Rdg Mall", // <>
+					"Winterberry @ Paramount Only", //
 					"Meadowlands" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Meadowlands", mTrip.getHeadsignId());
 				return true;
 			} else if (Arrays.asList( //
-					"Lime Rdg Mall", // same
+					"Lime Rdg Mall", // <>
 					"Highland @ Saltfleet HS" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Highland @ Saltfleet HS", mTrip.getHeadsignId());
@@ -408,18 +463,33 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Jones @ Hwy 8", mTrip.getHeadsignId());
 				return true;
 			}
+		} else if (mTrip.getRouteId() == 56L) {
+			if (Arrays.asList( //
+					"Confederation Walmart", //
+					"Lakeland CC" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Lakeland CC", mTrip.getHeadsignId());
+				return true;
+			}
 		} else if (mTrip.getRouteId() == RID_STM) {
 			if (Arrays.asList( //
-					"Rymal @ Upper James", //
 					"Scenic Loop", //
 					"Upper Paradise @ Mohawk", //
-					"St Thomas More HS PM" //
+					"Rymal @ Upper James" //
 			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("St Thomas More HS PM", mTrip.getHeadsignId());
+				mTrip.setHeadsignString("Rymal @ Upper James", mTrip.getHeadsignId());
+				return true;
+			}
+			if (Arrays.asList( //
+					"St Thomas More", //
+					"St Thomas More HS" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("St Thomas More HS", mTrip.getHeadsignId());
 				return true;
 			}
 		} else if (mTrip.getRouteId() == RID_TC) {
 			if (Arrays.asList( //
+					"Ticats Shuttle", //
 					"Ticat Post Game Shuttle", //
 					"Tim Hortons Field" //
 			).containsAll(headsignsValues)) {
@@ -432,6 +502,23 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 					"Waterfront" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Waterfront", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == RID_SHER) {
+			if (Arrays.asList( //
+					"Upper Ottawa @ Fennell", //
+					"Upper Gage & Lincoln Alexander South" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Upper Gage & Lincoln Alexander South", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == RID_C_JDB) { // TODO check
+			if (Arrays.asList( //
+					"John @ Jackson", //
+					"Upper Gage @ Rymal", //
+					"Rymal @ Upper Gage" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Rymal @ Upper Gage", mTrip.getHeadsignId());
 				return true;
 			}
 		}
