@@ -339,11 +339,13 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 23L) {
 			if (Arrays.asList( //
 					"Upper Gage @ Mohawk", //
+					"MacNab Terminal", //
 					"MacNab TT" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
 				return true;
-			} else if (Arrays.asList( //
+			}
+			if (Arrays.asList( //
 					"Upper Gage @ Rymal", //
 					"Rymal @ Upper Gage" //
 			).containsAll(headsignsValues)) {
@@ -371,6 +373,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 33L) {
 			if (Arrays.asList( //
 					"Fennell @ West 5th", //
+					"Mohawk Terminal", //
 					"MacNab TT" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("MacNab TT", mTrip.getHeadsignId());
@@ -402,6 +405,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		} else if (mTrip.getRouteId() == 41L) {
 			if (Arrays.asList( //
+					"Mohawk @ Upper James", // <>
+					"Mohawk @ Upper Gage", // <>
 					"41a Chedoke Hosp", //
 					"Mohawk @ Garth", //
 					"Meadowlands" //
@@ -409,8 +414,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Meadowlands", mTrip.getHeadsignId());
 				return true;
 			} else if (Arrays.asList( //
-					"Mohawk @ Upper James", //
-					"Mohawk @ Upper Gage", //
+					"Mohawk @ Upper James", // <>
+					"Mohawk @ Upper Gage", // <>
 					"Lime Rdg Mall", //
 					"Gage @ Industrial" //
 			).containsAll(headsignsValues)) {
