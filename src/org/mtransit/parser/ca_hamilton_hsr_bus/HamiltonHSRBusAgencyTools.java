@@ -97,6 +97,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final String RSN_VAN = "VAN";
 	private static final String RSN_C_NEW = "C.NEW";
 	private static final String RSN_C_JDB = "S.JDB";
+	private static final String RSN_CANOPEN = "CANOPEN";
 
 	private static final long RID_STM = 100_001L;
 	private static final long RID_TC = 100_002L;
@@ -107,6 +108,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final long RID_VAN = 100_007L;
 	private static final long RID_C_NEW = 100_008L;
 	private static final long RID_C_JDB = 100_009L;
+	private static final long RID_CANOPEN = 100_010L;
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
@@ -137,6 +139,9 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 			if (RSN_C_JDB.equals(gRoute.getRouteShortName())) {
 				return RID_C_JDB;
+			}
+			if (RSN_CANOPEN.equals(gRoute.getRouteShortName())) {
+				return RID_CANOPEN;
 			}
 			System.out.printf("\nUnexpected route ID for %s\n", gRoute);
 			System.exit(-1);
@@ -440,6 +445,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 44L) {
 			if (Arrays.asList( //
 					"Rymal @ Upper James", //
+					"Rymal @ Upper Gage", //
 					"Eastgate Sq" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Eastgate Sq", mTrip.getHeadsignId());
