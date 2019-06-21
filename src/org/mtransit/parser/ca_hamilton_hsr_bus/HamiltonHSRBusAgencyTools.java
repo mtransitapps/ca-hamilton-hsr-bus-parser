@@ -271,6 +271,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final String HERITAGE = "Heritage";
 	private static final String MAC_NAB = "MacNab";
 	private static final String WEST = "West";
+	private static final String BURLINGTON = "Burlington";
 
 	@Override
 	public boolean mergeHeadsign(MTrip mTrip, MTrip mTripToMerge) {
@@ -538,6 +539,9 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return false;
 	}
 
+	private static final Pattern BURLINGTON_ = Pattern.compile("((^|\\W){1}(burlinton)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
+	private static final String BURLINGTON_REPLACEMENT = "$2" + BURLINGTON + "$4";
+
 	private static final String COMMUNITY_CENTRE_SHORT = "CC"; // Community Center
 	private static final Pattern COMMUNITY_CENTRE = Pattern.compile("((^|\\W){1}(community centre|community center)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
 	private static final String COMMUNITY_CENTRE_REPLACEMENT = "$2" + COMMUNITY_CENTRE_SHORT + "$4";
@@ -582,6 +586,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
 		tripHeadsign = tripHeadsign.toLowerCase(Locale.ENGLISH);
+		tripHeadsign = BURLINGTON_.matcher(tripHeadsign).replaceAll(BURLINGTON_REPLACEMENT);
 		tripHeadsign = COMMUNITY_CENTRE.matcher(tripHeadsign).replaceAll(COMMUNITY_CENTRE_REPLACEMENT);
 		tripHeadsign = HAMILTON_AIRPORT.matcher(tripHeadsign).replaceAll(HAMILTON_AIRPORT_REPLACEMENT);
 		tripHeadsign = HAMILTON_WATERFRONT.matcher(tripHeadsign).replaceAll(HAMILTON_WATERFRONT_REPLACEMENT);
