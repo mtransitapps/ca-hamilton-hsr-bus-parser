@@ -14,8 +14,8 @@ import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.Pair;
 import org.mtransit.parser.SplitUtils;
-import org.mtransit.parser.Utils;
 import org.mtransit.parser.SplitUtils.RouteTripSpec;
+import org.mtransit.parser.Utils;
 import org.mtransit.parser.gtfs.data.GCalendar;
 import org.mtransit.parser.gtfs.data.GCalendarDate;
 import org.mtransit.parser.gtfs.data.GRoute;
@@ -24,7 +24,6 @@ import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.gtfs.data.GTrip;
 import org.mtransit.parser.gtfs.data.GTripStop;
 import org.mtransit.parser.mt.data.MAgency;
-import org.mtransit.parser.mt.data.MDirectionType;
 import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
 import org.mtransit.parser.mt.data.MTripStop;
@@ -88,64 +87,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
 
-	private static final String RSN_STM = "STM";
-	private static final String RSN_TC = "TC";
-	private static final String RSN_PEACH = "PEACH";
-	private static final String RSN_CAN = "CAN";
-	private static final String RSN_FOF = "FOF";
-	private static final String RSN_SHER = "SHER";
-	private static final String RSN_VAN = "VAN";
-	private static final String RSN_C_NEW = "C.NEW";
-	private static final String RSN_C_JDB = "S.JDB";
-	private static final String RSN_CANOPEN = "CANOPEN";
-
-	private static final long RID_STM = 100_001L;
-	private static final long RID_TC = 100_002L;
-	private static final long RID_PEACH = 100_003L;
-	private static final long RID_CAN = 100_004L;
-	private static final long RID_FOF = 100_005L;
-	private static final long RID_SHER = 100_006L;
-	private static final long RID_VAN = 100_007L;
-	private static final long RID_C_NEW = 100_008L;
-	private static final long RID_C_JDB = 100_009L;
-	private static final long RID_CANOPEN = 100_010L;
 
 	@Override
 	public long getRouteId(GRoute gRoute) {
 		if (!Utils.isDigitsOnly(gRoute.getRouteShortName())) {
-			if (RSN_STM.equals(gRoute.getRouteShortName())) {
-				return RID_STM;
-			}
-			if (RSN_TC.equals(gRoute.getRouteShortName())) {
-				return RID_TC;
-			}
-			if (RSN_PEACH.equals(gRoute.getRouteShortName())) {
-				return RID_PEACH;
-			}
-			if (RSN_CAN.equals(gRoute.getRouteShortName())) {
-				return RID_CAN;
-			}
-			if (RSN_FOF.equals(gRoute.getRouteShortName())) {
-				return RID_FOF;
-			}
-			if (RSN_SHER.equals(gRoute.getRouteShortName())) {
-				return RID_SHER;
-			}
-			if (RSN_VAN.equals(gRoute.getRouteShortName())) {
-				return RID_VAN;
-			}
-			if (RSN_C_NEW.equals(gRoute.getRouteShortName())) {
-				return RID_C_NEW;
-			}
-			if (RSN_C_JDB.equals(gRoute.getRouteShortName())) {
-				return RID_C_JDB;
-			}
-			if (RSN_CANOPEN.equals(gRoute.getRouteShortName())) {
-				return RID_CANOPEN;
-			}
-			System.out.printf("\nUnexpected route ID for %s\n", gRoute);
-			System.exit(-1);
-			return -1L;
+			return Long.parseLong(gRoute.getRouteId()); // good enough
 		}
 		return Long.parseLong(gRoute.getRouteShortName());
 	}
@@ -187,29 +133,6 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
 	static {
 		HashMap<Long, RouteTripSpec> map2 = new HashMap<Long, RouteTripSpec>();
-		map2.put(18L, new RouteTripSpec(18L, //
-				0, MTrip.HEADSIGN_TYPE_STRING, "Clockwise", //
-				1, MTrip.HEADSIGN_TYPE_STRING, "Counter-Clockwise") //
-				.addTripSort(0, //
-						Arrays.asList(new String[] { //
-						"355340", // "1800", // ALDERSHOT GO VIA STATION PLATFORM 10
-								"355342", // ==
-								"355343", // !=
-								"355365", // !=
-								"355366", // ==
-								"355340", // "1800", // ALDERSHOT GO VIA STATION PLATFORM 10
-						})) //
-				.addTripSort(1, //
-						Arrays.asList(new String[] { //
-						"355340", // "1800", // ALDERSHOT GO VIA STATION PLATFORM 10
-								"355342", // ==
-								"355854", // !=
-								"355879", // !=
-								"355366", // ==
-								"355340", // "1800", // ALDERSHOT GO VIA STATION PLATFORM 10
-						//
-						})) //
-				.compileBothTripSort());
 		ALL_ROUTE_TRIPS2 = map2;
 	}
 
@@ -245,11 +168,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			return; // split
 		}
 		if (mRoute.getId() == 18L) {
-			if (gTrip.getTripHeadsign().toLowerCase(Locale.ENGLISH).endsWith("eastbound")) {
-				mTrip.setHeadsignDirection(MDirectionType.EAST);
+			if (gTrip.getTripHeadsign().endsWith("COUNTER - CLOCKWISE")) {
+				mTrip.setHeadsignString("Counter-Clockwise", gTrip.getDirectionId());
 				return;
-			} else if (gTrip.getTripHeadsign().toLowerCase(Locale.ENGLISH).endsWith("westbound")) {
-				mTrip.setHeadsignDirection(MDirectionType.WEST);
+			} else if (gTrip.getTripHeadsign().endsWith("CLOCKWISE")) {
+				mTrip.setHeadsignString("Clockwise", gTrip.getDirectionId());
 				return;
 			}
 		}
@@ -451,7 +374,17 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Eastgate Sq", mTrip.getHeadsignId());
 				return true;
-			} else if (Arrays.asList( //
+			}
+			if (Arrays.asList( //
+					"Rymal @ Upper James", //
+					"Rymal @ Upper Gage", //
+					"Eastgate Sq", //
+					"Confederation Walmart" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Confederation Walmart", mTrip.getHeadsignId());
+				return true;
+			}
+			if (Arrays.asList( //
 					"Rymal @ Upper James", //
 					"Glancaster Loop", //
 					"Ancaster Business Pk" //
@@ -483,7 +416,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Lakeland CC", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == RID_STM) {
+		} else if (mTrip.getRouteId() == 3969L) { // ST. THOMAS MORE
 			if (Arrays.asList( //
 					"Scenic Loop", //
 					"Upper Paradise @ Mohawk", //
@@ -492,31 +425,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper James", mTrip.getHeadsignId());
 				return true;
 			}
-			if (Arrays.asList( //
-					"St Thomas More", //
-					"St Thomas More HS" //
-			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("St Thomas More HS", mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == RID_TC) {
-			if (Arrays.asList( //
-					"Ticats Shuttle", //
-					"Ticat Post Game Shuttle", //
-					"Tim Hortons Field" //
-			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("Tim Hortons Field", mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == RID_CAN) {
-			if (Arrays.asList( //
-					"Bayfront Pk", //
-					"Waterfront" //
-			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("Waterfront", mTrip.getHeadsignId());
-				return true;
-			}
-		} else if (mTrip.getRouteId() == RID_SHER) {
+		} else if (mTrip.getRouteId() == 3967L) { // SHERWOOD SECONDARY
 			if (Arrays.asList( //
 					"Upper Ottawa @ Fennell", //
 					"Upper Gage & Lincoln Alexander South" //
@@ -524,13 +433,21 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Upper Gage & Lincoln Alexander South", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == RID_C_JDB) { // TODO check
+		} else if (mTrip.getRouteId() == 3968L) { // ST. JEAN DE BREBEUF
 			if (Arrays.asList( //
 					"John @ Jackson", //
 					"Upper Gage @ Rymal", //
 					"Rymal @ Upper Gage" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Rymal @ Upper Gage", mTrip.getHeadsignId());
+				return true;
+			}
+		} else if (mTrip.getRouteId() == 3975L) { // ANCASTER FAIR SHUTTLE
+			if (Arrays.asList( //
+					"Meadowlands", //
+					"Downtown" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Downtown", mTrip.getHeadsignId());
 				return true;
 			}
 		}
