@@ -1,17 +1,9 @@
 package org.mtransit.parser.ca_hamilton_hsr_bus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.StringUtils;
 import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.DefaultAgencyTools;
+import org.mtransit.parser.MTLog;
 import org.mtransit.parser.Pair;
 import org.mtransit.parser.SplitUtils;
 import org.mtransit.parser.SplitUtils.RouteTripSpec;
@@ -27,6 +19,14 @@ import org.mtransit.parser.mt.data.MAgency;
 import org.mtransit.parser.mt.data.MRoute;
 import org.mtransit.parser.mt.data.MTrip;
 import org.mtransit.parser.mt.data.MTripStop;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 // https://www.hamilton.ca/city-initiatives/strategies-actions/open-data-program
 // http://googlehsr.hamilton.ca/latest/google_transit.zip
@@ -46,11 +46,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public void start(String[] args) {
-		System.out.printf("\nGenerating HSR bus data...");
+		MTLog.log("Generating HSR bus data...");
 		long start = System.currentTimeMillis();
-		this.serviceIds = extractUsefulServiceIds(args, this);
+		this.serviceIds = extractUsefulServiceIds(args, this, true);
 		super.start(args);
-		System.out.printf("\nGenerating HSR bus data... DONE in %s.\n", Utils.getPrettyDuration(System.currentTimeMillis() - start));
+		MTLog.log("Generating HSR bus data... DONE in %s.", Utils.getPrettyDuration(System.currentTimeMillis() - start));
 	}
 
 	@Override
@@ -87,7 +87,6 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
 
-
 	@Override
 	public long getRouteId(GRoute gRoute) {
 		if (!Utils.isDigitsOnly(gRoute.getRouteShortName())) {
@@ -111,8 +110,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			routeColor = "FFEA00"; // YELLOW - darker
 		}
 		if (StringUtils.isEmpty(routeColor)) {
-			System.out.printf("\nUnexpected route color for %s\n", gRoute);
-			System.exit(-1);
+			MTLog.logFatal("Unexpected route color for %s", gRoute);
 			return null;
 		}
 		return routeColor;
@@ -131,8 +129,10 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	private static HashMap<Long, RouteTripSpec> ALL_ROUTE_TRIPS2;
+
 	static {
-		HashMap<Long, RouteTripSpec> map2 = new HashMap<Long, RouteTripSpec>();
+		//noinspection UnnecessaryLocalVariable
+		HashMap<Long, RouteTripSpec> map2 = new HashMap<>();
 		ALL_ROUTE_TRIPS2 = map2;
 	}
 
@@ -160,8 +160,6 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return super.splitTripStop(mRoute, gTrip, gTripStop, splitTrips, routeGTFS);
 	}
 
-	private static final Pattern VIA = Pattern.compile("((^|\\W){1}(via)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-
 	@Override
 	public void setTripHeadsign(MRoute mRoute, MTrip mTrip, GTrip gTrip, GSpec gtfs) {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
@@ -177,14 +175,10 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		}
 		String tripHeadsign = gTrip.getTripHeadsign();
-		Matcher matcherVIA = VIA.matcher(tripHeadsign);
-		if (matcherVIA.find()) {
-			String gTripHeadsignBeforeVIA = tripHeadsign.substring(0, matcherVIA.start());
-			tripHeadsign = gTripHeadsignBeforeVIA;
-		}
 		mTrip.setHeadsignString(cleanTripHeadsign(tripHeadsign), gTrip.getDirectionId());
 	}
 
+	private static final String GO = "GO";
 	private static final String TRANSIT_TERMINAL_SHORT = "TT"; // Transit Terminal
 	private static final String EAST = "East";
 	private static final String GREENE_SHORT = "Grn";
@@ -202,9 +196,9 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		if (mTrip.getRouteId() == 1L) {
 			if (Arrays.asList( //
 					"1a University Plz", //
-					"Hamilton Go Ctr" //
+					"Hamilton " + GO + " Ctr" //
 			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("Hamilton Go Ctr", mTrip.getHeadsignId());
+				mTrip.setHeadsignString("Hamilton " + GO + " Ctr", mTrip.getHeadsignId());
 				return true;
 			} else if (Arrays.asList( //
 					"Downtown", //
@@ -222,20 +216,20 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 					"Jones @ King", //
 					"Main @ MacNab", //
 					EAST //
-					).containsAll(headsignsValues)) {
+			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString(EAST, mTrip.getHeadsignId());
 				return true;
 			} else if (Arrays.asList( //
 					"Downtown", // <>
 					"Meadowlands", //
 					"52 Head St", //
-					"52 To Head St", //
+					"Head St", //
 					"52 Pirie @ Governors", //
 					"5c Meadowlands", //
 					"5c West Hamilton Loop", //
 					"West Hamilton Loop", //
 					WEST //
-					).containsAll(headsignsValues)) {
+			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString(WEST, mTrip.getHeadsignId());
 				return true;
 			}
@@ -386,6 +380,15 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 			if (Arrays.asList( //
 					"Rymal @ Upper James", //
+					"Rymal @ Upper Gage", //
+					"Eastgate Sq", //
+					"Confederation " + GO + " Sta" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Confederation " + GO + " Sta", mTrip.getHeadsignId());
+				return true;
+			}
+			if (Arrays.asList( //
+					"Rymal @ Upper James", //
 					"Glancaster Loop", //
 					"Ancaster Business Pk" //
 			).containsAll(headsignsValues)) {
@@ -416,7 +419,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Lakeland CC", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3969L) { // ST. THOMAS MORE
+		} else if (mTrip.getRouteId() == 3969L
+				|| mTrip.getRouteId() == 4021L) { // ST. THOMAS MORE
 			if (Arrays.asList( //
 					"Scenic Loop", //
 					"Upper Paradise @ Mohawk", //
@@ -425,7 +429,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper James", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3967L) { // SHERWOOD SECONDARY
+		} else if (mTrip.getRouteId() == 3967L //
+				|| mTrip.getRouteId() == 4019L) { // SHERWOOD SECONDARY
 			if (Arrays.asList( //
 					"Upper Ottawa @ Fennell", //
 					"Upper Gage & Lincoln Alexander South" //
@@ -433,7 +438,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Upper Gage & Lincoln Alexander South", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3968L) { // ST. JEAN DE BREBEUF
+		} else if (mTrip.getRouteId() == 3968L
+				|| mTrip.getRouteId() == 4020L) { // ST. JEAN DE BREBEUF
 			if (Arrays.asList( //
 					"John @ Jackson", //
 					"Upper Gage @ Rymal", //
@@ -442,7 +448,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper Gage", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3975L) { // ANCASTER FAIR SHUTTLE
+		} else if (mTrip.getRouteId() == 3975L
+				|| mTrip.getRouteId() == 3976L) { // ANCASTER FAIR SHUTTLE
 			if (Arrays.asList( //
 					"Meadowlands", //
 					"Downtown" //
@@ -451,58 +458,61 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return true;
 			}
 		}
-		System.out.printf("\nUnexpected trips to merge %s & %s\n", mTrip, mTripToMerge);
-		System.exit(-1);
+		MTLog.logFatal("Unexpected trips to merge %s & %s", mTrip, mTripToMerge);
 		return false;
 	}
 
-	private static final Pattern BURLINGTON_ = Pattern.compile("((^|\\W){1}(burlinton)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String BURLINGTON_REPLACEMENT = "$2" + BURLINGTON + "$4";
+	private static final Pattern BURLINGTON_ = CleanUtils.cleanWords("burlinton");
+	private static final String BURLINGTON_REPLACEMENT = CleanUtils.cleanWordsReplacement(BURLINGTON);
 
 	private static final String COMMUNITY_CENTRE_SHORT = "CC"; // Community Center
-	private static final Pattern COMMUNITY_CENTRE = Pattern.compile("((^|\\W){1}(community centre|community center)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String COMMUNITY_CENTRE_REPLACEMENT = "$2" + COMMUNITY_CENTRE_SHORT + "$4";
+	private static final Pattern COMMUNITY_CENTRE = CleanUtils.cleanWords("community centre", "community center");
+	private static final String COMMUNITY_CENTRE_REPLACEMENT = CleanUtils.cleanWordsReplacement(COMMUNITY_CENTRE_SHORT);
 
-	private static final Pattern HAMILTON_AIRPORT = Pattern.compile("((^|\\W){1}(hamilton airport)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String HAMILTON_AIRPORT_REPLACEMENT = "$2" + HAMILTON_AIRPORT_SHORT + "$4";
+	private static final Pattern HAMILTON_AIRPORT = CleanUtils.cleanWords("hamilton airport");
+	private static final String HAMILTON_AIRPORT_REPLACEMENT = CleanUtils.cleanWordsReplacement(HAMILTON_AIRPORT_SHORT);
 
-	private static final Pattern HAMILTON_WATERFRONT = Pattern.compile("((^|\\W){1}(hamilton waterfront)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String HAMILTON_WATERFRONT_REPLACEMENT = "$2" + HAMILTON_WATERFRONT_SHORT + "$4";
+	private static final Pattern HAMILTON_WATERFRONT = CleanUtils.cleanWords("hamilton waterfront");
+	private static final String HAMILTON_WATERFRONT_REPLACEMENT = CleanUtils.cleanWordsReplacement(HAMILTON_WATERFRONT_SHORT);
 
-	private static final Pattern MAC_NAB_LC = Pattern.compile("((^|\\W){1}(macnab)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String MAC_NAB_LC_REPLACEMENT = "$2" + MAC_NAB + "$4";
+	private static final Pattern MAC_NAB_LC = CleanUtils.cleanWords("macnab");
+	private static final String MAC_NAB_LC_REPLACEMENT = CleanUtils.cleanWordsReplacement(MAC_NAB);
 
 	private static final String PARK_AND_RIDE_SHORT = "P&R"; // Park & Ride
-	private static final Pattern PARK_AND_RIDE = Pattern.compile("((^|\\W){1}(park 'n' ride)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String PARK_AND_RIDE_REPLACEMENT = "$2" + PARK_AND_RIDE_SHORT + "$4";
+	private static final Pattern PARK_AND_RIDE = CleanUtils.cleanWords("park 'n' ride");
+	private static final String PARK_AND_RIDE_REPLACEMENT = CleanUtils.cleanWordsReplacement(PARK_AND_RIDE_SHORT);
 
 	private static final String POWER_CENTRE_SHORT = "TC"; // Power Center
-	private static final Pattern POWER_CENTRE = Pattern.compile("((^|\\W){1}(power centre|power center)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String POWER_CENTRE_REPLACEMENT = "$2" + POWER_CENTRE_SHORT + "$4";
+	private static final Pattern POWER_CENTRE = CleanUtils.cleanWords("power centre", "power center");
+	private static final String POWER_CENTRE_REPLACEMENT = CleanUtils.cleanWordsReplacement(POWER_CENTRE_SHORT);
 
 	private static final String SALTFLEET_SCHOOL_SHORT = "Saltfleet HS"; // Saltfleet High School
-	private static final Pattern SALTFLEET_SCHOOL = Pattern.compile("((^|\\W){1}(saltfleet high school|saltfleet school)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String SALTFLEET_SCHOOL_REPLACEMENT = "$2" + SALTFLEET_SCHOOL_SHORT + "$4";
+	private static final Pattern SALTFLEET_SCHOOL = CleanUtils.cleanWords("saltfleet high school", "saltfleet school");
+	private static final String SALTFLEET_SCHOOL_REPLACEMENT = CleanUtils.cleanWordsReplacement(SALTFLEET_SCHOOL_SHORT);
 
 	private static final String TRANSIT_CENTRE_SHORT = "TC"; // Transit Center
-	private static final Pattern TRANSIT_CENTRE = Pattern.compile("((^|\\W){1}(transit centre|transit center)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String TRANSIT_CENTRE_REPLACEMENT = "$2" + TRANSIT_CENTRE_SHORT + "$4";
+	private static final Pattern TRANSIT_CENTRE = CleanUtils.cleanWords("transit centre", "transit center");
+	private static final String TRANSIT_CENTRE_REPLACEMENT = CleanUtils.cleanWordsReplacement(TRANSIT_CENTRE_SHORT);
 
-	private static final Pattern TRANSIT_TERMINAL = Pattern.compile("((^|\\W){1}(transit terminal)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String TRANSIT_TERMINAL_REPLACEMENT = "$2" + TRANSIT_TERMINAL_SHORT + "$4";
+	private static final Pattern GO_ = CleanUtils.cleanWords("go");
+	private static final String GO_REPLACEMENT = CleanUtils.cleanWordsReplacement(GO);
 
-	private static final Pattern HIGH_SCHOOL_ = Pattern.compile("((^|\\W){1}(high school)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String HIGH_SCHOOL_REPLACEMENT = "$2" + HIGH_SCHOOL_SHORT + "$4";
+	private static final Pattern TRANSIT_TERMINAL = CleanUtils.cleanWords("transit terminal");
+	private static final String TRANSIT_TERMINAL_REPLACEMENT = CleanUtils.cleanWordsReplacement(TRANSIT_TERMINAL_SHORT);
 
-	private static final Pattern GREENE_ = Pattern.compile("((^|\\W){1}(greene)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String GREENE_REPLACEMENT = "$2" + GREENE_SHORT + "$4";
+	private static final Pattern HIGH_SCHOOL_ = CleanUtils.cleanWords("high school");
+	private static final String HIGH_SCHOOL_REPLACEMENT = CleanUtils.cleanWordsReplacement(HIGH_SCHOOL_SHORT);
 
-	private static final Pattern HERITAGE_ = Pattern.compile("((^|\\W){1}(Heratige)(\\W|$){1})", Pattern.CASE_INSENSITIVE);
-	private static final String HERITAGE_REPLACEMENT = "$2" + HERITAGE + "$4";
+	private static final Pattern GREENE_ = CleanUtils.cleanWords("greene");
+	private static final String GREENE_REPLACEMENT = CleanUtils.cleanWordsReplacement(GREENE_SHORT);
+
+	private static final Pattern HERITAGE_ = CleanUtils.cleanWords("Heratige");
+	private static final String HERITAGE_REPLACEMENT = CleanUtils.cleanWordsReplacement(HERITAGE);
 
 	@Override
 	public String cleanTripHeadsign(String tripHeadsign) {
-		tripHeadsign = tripHeadsign.toLowerCase(Locale.ENGLISH);
+		tripHeadsign = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, tripHeadsign);
+		tripHeadsign = CleanUtils.keepToAndRemoveVia(tripHeadsign);
 		tripHeadsign = BURLINGTON_.matcher(tripHeadsign).replaceAll(BURLINGTON_REPLACEMENT);
 		tripHeadsign = COMMUNITY_CENTRE.matcher(tripHeadsign).replaceAll(COMMUNITY_CENTRE_REPLACEMENT);
 		tripHeadsign = HAMILTON_AIRPORT.matcher(tripHeadsign).replaceAll(HAMILTON_AIRPORT_REPLACEMENT);
@@ -513,6 +523,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = SALTFLEET_SCHOOL.matcher(tripHeadsign).replaceAll(SALTFLEET_SCHOOL_REPLACEMENT);
 		tripHeadsign = TRANSIT_CENTRE.matcher(tripHeadsign).replaceAll(TRANSIT_CENTRE_REPLACEMENT);
 		tripHeadsign = TRANSIT_TERMINAL.matcher(tripHeadsign).replaceAll(TRANSIT_TERMINAL_REPLACEMENT);
+		tripHeadsign = GO_.matcher(tripHeadsign).replaceAll(GO_REPLACEMENT);
 		tripHeadsign = GREENE_.matcher(tripHeadsign).replaceAll(GREENE_REPLACEMENT);
 		tripHeadsign = HERITAGE_.matcher(tripHeadsign).replaceAll(HERITAGE_REPLACEMENT);
 		tripHeadsign = HIGH_SCHOOL_.matcher(tripHeadsign).replaceAll(HIGH_SCHOOL_REPLACEMENT);
@@ -527,7 +538,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String cleanStopName(String gStopName) {
-		gStopName = gStopName.toLowerCase(Locale.ENGLISH);
+		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName);
+		gStopName = GO_.matcher(gStopName).replaceAll(GO_REPLACEMENT);
 		gStopName = CleanUtils.CLEAN_AT.matcher(gStopName).replaceAll(CleanUtils.CLEAN_AT_REPLACEMENT);
 		gStopName = CleanUtils.cleanStreetTypes(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
@@ -546,8 +558,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return Integer.valueOf(stopId);
 			}
 		}
-		System.out.println("Unexpected stop ID for " + gStop + " !");
-		System.exit(-1);
+		MTLog.logFatal("Unexpected stop ID for " + gStop + " !");
 		return -1;
 	}
 }
