@@ -448,8 +448,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper Gage", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3975L
-				|| mTrip.getRouteId() == 3976L) { // ANCASTER FAIR SHUTTLE
+		} else if (mTrip.getRouteId() == 4013) { // ANCASTER FAIR SHUTTLE
 			if (Arrays.asList( //
 					"Meadowlands", //
 					"Downtown" //
