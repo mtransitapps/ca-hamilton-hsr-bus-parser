@@ -363,25 +363,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 44L) {
 			if (Arrays.asList( //
 					"Rymal @ Upper James", //
-					"Rymal @ Upper Gage", //
-					"Eastgate Sq" //
-			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("Eastgate Sq", mTrip.getHeadsignId());
-				return true;
-			}
-			if (Arrays.asList( //
-					"Rymal @ Upper James", //
-					"Rymal @ Upper Gage", //
-					"Eastgate Sq", //
-					"Confederation Walmart" //
-			).containsAll(headsignsValues)) {
-				mTrip.setHeadsignString("Confederation Walmart", mTrip.getHeadsignId());
-				return true;
-			}
-			if (Arrays.asList( //
-					"Rymal @ Upper James", //
-					"Rymal @ Upper Gage", //
-					"Eastgate Sq", //
+					"Confederation Walmart", //
 					"Confederation " + GO + " Sta" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Confederation " + GO + " Sta", mTrip.getHeadsignId());
@@ -420,7 +402,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return true;
 			}
 		} else if (mTrip.getRouteId() == 3969L
-				|| mTrip.getRouteId() == 4021L) { // ST. THOMAS MORE
+				|| mTrip.getRouteId() == 4021L
+				|| mTrip.getRouteId() == 4114L) { // ST. THOMAS MORE
 			if (Arrays.asList( //
 					"Scenic Loop", //
 					"Upper Paradise @ Mohawk", //
@@ -429,8 +412,9 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper James", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3967L //
-				|| mTrip.getRouteId() == 4019L) { // SHERWOOD SECONDARY
+		} else if (mTrip.getRouteId() == 3967L
+				|| mTrip.getRouteId() == 4019L
+				|| mTrip.getRouteId() == 4112L) { // SHERWOOD SECONDARY
 			if (Arrays.asList( //
 					"Upper Ottawa @ Fennell", //
 					"Upper Gage & Lincoln Alexander South" //
@@ -439,7 +423,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return true;
 			}
 		} else if (mTrip.getRouteId() == 3968L
-				|| mTrip.getRouteId() == 4020L) { // ST. JEAN DE BREBEUF
+				|| mTrip.getRouteId() == 4020L
+				|| mTrip.getRouteId() == 4113L) { // ST. JEAN DE BREBEUF
 			if (Arrays.asList( //
 					"John @ Jackson", //
 					"Upper Gage @ Rymal", //
@@ -448,7 +433,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper Gage", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 4013) { // ANCASTER FAIR SHUTTLE
+		} else if (mTrip.getRouteId() == 4013L
+				|| mTrip.getRouteId() == 4106L) { // ANCASTER FAIR SHUTTLE
 			if (Arrays.asList( //
 					"Meadowlands", //
 					"Downtown" //
