@@ -1,6 +1,7 @@
 package org.mtransit.parser.ca_hamilton_hsr_bus;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.mtransit.parser.CleanUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
@@ -83,6 +84,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
+	public boolean excludeRoute(@NotNull GRoute gRoute) {
+		return super.excludeRoute(gRoute);
+	}
+
+	@Override
 	public Integer getAgencyRouteType() {
 		return MAgency.ROUTE_TYPE_BUS;
 	}
@@ -118,7 +124,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public String getRouteLongName(GRoute gRoute) {
-		return CleanUtils.cleanLabel(gRoute.getRouteLongName().toLowerCase(Locale.ENGLISH));
+		return CleanUtils.cleanLabel(gRoute.getRouteLongNameOrDefault().toLowerCase(Locale.ENGLISH));
 	}
 
 	private static final String AGENCY_COLOR = "F4CB0B"; // YELLOW (flag)
@@ -165,17 +171,18 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		if (ALL_ROUTE_TRIPS2.containsKey(mRoute.getId())) {
 			return; // split
 		}
+		final String tripHeadsign = gTrip.getTripHeadsignOrDefault();
+		final int directionId = gTrip.getDirectionIdOrDefault();
 		if (mRoute.getId() == 18L) {
-			if (gTrip.getTripHeadsign().endsWith("COUNTER - CLOCKWISE")) {
-				mTrip.setHeadsignString("Counter-Clockwise", gTrip.getDirectionId());
+			if (tripHeadsign.endsWith("COUNTER - CLOCKWISE")) {
+				mTrip.setHeadsignString("Counter-Clockwise", directionId);
 				return;
-			} else if (gTrip.getTripHeadsign().endsWith("CLOCKWISE")) {
-				mTrip.setHeadsignString("Clockwise", gTrip.getDirectionId());
+			} else if (tripHeadsign.endsWith("CLOCKWISE")) {
+				mTrip.setHeadsignString("Clockwise", directionId);
 				return;
 			}
 		}
-		String tripHeadsign = gTrip.getTripHeadsign();
-		mTrip.setHeadsignString(cleanTripHeadsign(tripHeadsign), gTrip.getDirectionId());
+		mTrip.setHeadsignString(cleanTripHeadsign(tripHeadsign), directionId);
 	}
 
 	private static final String GO = "GO";
@@ -533,17 +540,17 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public int getStopId(GStop gStop) {
+		//noinspection deprecation
 		String stopId = gStop.getStopId();
-		if (stopId != null && stopId.length() > 0) {
+		if (stopId.length() > 0) {
 			if (Utils.isDigitsOnly(stopId)) {
-				return Integer.valueOf(stopId);
+				return Integer.parseInt(stopId);
 			}
 			stopId = CleanUtils.cleanMergedID(stopId);
 			if (Utils.isDigitsOnly(stopId)) {
-				return Integer.valueOf(stopId);
+				return Integer.parseInt(stopId);
 			}
 		}
-		MTLog.logFatal("Unexpected stop ID for " + gStop + " !");
-		return -1;
+		throw new MTLog.Fatal("Unexpected stop ID for %s!", gStop);
 	}
 }
