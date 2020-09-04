@@ -116,8 +116,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			routeColor = "FFEA00"; // YELLOW - darker
 		}
 		if (StringUtils.isEmpty(routeColor)) {
-			MTLog.logFatal("Unexpected route color for %s", gRoute);
-			return null;
+			throw new MTLog.Fatal("Unexpected route color for %s", gRoute);
 		}
 		return routeColor;
 	}
@@ -318,6 +317,13 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Glancaster Loop", mTrip.getHeadsignId());
 				return true;
 			}
+			if (Arrays.asList( //
+					"Mohawk @ Upper Paradise", //
+					"Downtown" //
+			).containsAll(headsignsValues)) {
+				mTrip.setHeadsignString("Downtown", mTrip.getHeadsignId());
+				return true;
+			}
 		} else if (mTrip.getRouteId() == 35L) {
 			if (Arrays.asList( //
 					"Mohawk College", //
@@ -356,12 +362,14 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			if (Arrays.asList( //
 					"Lime Rdg Mall", // <>
 					"Winterberry @ Paramount Only", //
+					"Stone Church @ Upper Paradise", //
 					"Meadowlands" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Meadowlands", mTrip.getHeadsignId());
 				return true;
 			} else if (Arrays.asList( //
 					"Lime Rdg Mall", // <>
+					"Bishop Ryan Secondary School", //
 					"Highland @ Saltfleet HS" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Highland @ Saltfleet HS", mTrip.getHeadsignId());
@@ -370,6 +378,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 44L) {
 			if (Arrays.asList( //
 					"Rymal @ Upper James", //
+					"Rymal @ Upper Gage", //
+					"Eastgate Sq", //
 					"Confederation Walmart", //
 					"Confederation " + GO + " Sta" //
 			).containsAll(headsignsValues)) {
@@ -408,9 +418,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Lakeland CC", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3969L
-				|| mTrip.getRouteId() == 4021L
-				|| mTrip.getRouteId() == 4114L) { // ST. THOMAS MORE
+		} else if (mTrip.getRouteId() == 4344L) { // STM ST. THOMAS MORE
 			if (Arrays.asList( //
 					"Scenic Loop", //
 					"Upper Paradise @ Mohawk", //
@@ -419,9 +427,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Rymal @ Upper James", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3967L
-				|| mTrip.getRouteId() == 4019L
-				|| mTrip.getRouteId() == 4112L) { // SHERWOOD SECONDARY
+		} else if (mTrip.getRouteId() == 4342L) { // SHER - SHERWOOD SECONDARY
 			if (Arrays.asList( //
 					"Upper Ottawa @ Fennell", //
 					"Upper Gage & Lincoln Alexander South" //
@@ -429,9 +435,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				mTrip.setHeadsignString("Upper Gage & Lincoln Alexander South", mTrip.getHeadsignId());
 				return true;
 			}
-		} else if (mTrip.getRouteId() == 3968L
-				|| mTrip.getRouteId() == 4020L
-				|| mTrip.getRouteId() == 4113L) { // ST. JEAN DE BREBEUF
+		} else if (mTrip.getRouteId() == 4343L) { // JDB - ST. JEAN DE BREBEUF
 			if (Arrays.asList( //
 					"John @ Jackson", //
 					"Upper Gage @ Rymal", //
@@ -450,8 +454,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 				return true;
 			}
 		}
-		MTLog.logFatal("Unexpected trips to merge %s & %s", mTrip, mTripToMerge);
-		return false;
+		throw new MTLog.Fatal("Unexpected trips to merge %s & %s", mTrip, mTripToMerge);
 	}
 
 	private static final Pattern BURLINGTON_ = CleanUtils.cleanWords("burlinton");
