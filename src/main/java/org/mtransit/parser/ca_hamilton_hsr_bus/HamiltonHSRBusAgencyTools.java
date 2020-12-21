@@ -201,7 +201,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		List<String> headsignsValues = Arrays.asList(mTrip.getHeadsignValue(), mTripToMerge.getHeadsignValue());
 		if (mTrip.getRouteId() == 1L) {
 			if (Arrays.asList( //
-					"1a University Plz", //
+					"1A University Plz", //
 					"Hamilton " + GO + " Ctr" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Hamilton " + GO + " Ctr", mTrip.getHeadsignId());
@@ -217,8 +217,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		} else if (mTrip.getRouteId() == 5L) {
 			if (Arrays.asList( //
 					"Downtown", // <>
-					"5a Greenhill @ Cochrane", //
-					"5e Quigley @ Greenhill", //
+					"5A Greenhill @ Cochrane", //
+					"5E Quigley @ Greenhill", //
 					"Jones @ King", //
 					"Main @ MacNab", //
 					EAST //
@@ -231,8 +231,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 					"52 Head St", //
 					"Head St", //
 					"52 Pirie @ Governors", //
-					"5c Meadowlands", //
-					"5c West Hamilton Loop", //
+					"5C Meadowlands", //
+					"5C West Hamilton Loop", //
 					"West Hamilton Loop", //
 					WEST //
 			).containsAll(headsignsValues)) {
@@ -310,7 +310,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		} else if (mTrip.getRouteId() == 34L) {
 			if (Arrays.asList( //
-					"34a Upper Horning Loop", //
+					"34A Upper Horning Loop", //
 					"Glancaster & Upper Horning Loops", //
 					"Glancaster Loop" //
 			).containsAll(headsignsValues)) {
@@ -343,7 +343,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			if (Arrays.asList( //
 					"Mohawk @ Upper James", // <>
 					"Mohawk @ Upper Gage", // <>
-					"41a Chedoke Hosp", //
+					"41A Chedoke Hosp", //
 					"Mohawk @ Garth", //
 					"Meadowlands" //
 			).containsAll(headsignsValues)) {
@@ -404,7 +404,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			}
 		} else if (mTrip.getRouteId() == 55L) {
 			if (Arrays.asList( //
-					"55a Levi Loop", //
+					"55A Levi Loop", //
 					"Jones @ Hwy 8" //
 			).containsAll(headsignsValues)) {
 				mTrip.setHeadsignString("Jones @ Hwy 8", mTrip.getHeadsignId());
