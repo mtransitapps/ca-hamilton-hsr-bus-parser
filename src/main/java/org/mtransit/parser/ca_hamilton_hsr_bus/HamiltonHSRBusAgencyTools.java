@@ -188,33 +188,13 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	private static final Pattern HAMILTON_WATERFRONT = CleanUtils.cleanWords("hamilton waterfront");
 	private static final String HAMILTON_WATERFRONT_REPLACEMENT = CleanUtils.cleanWordsReplacement(HAMILTON_WATERFRONT_SHORT);
 
-	private static final String MAC_NAB = "MacNab";
-	private static final Pattern MAC_NAB_LC = CleanUtils.cleanWords("macnab");
-	private static final String MAC_NAB_LC_REPLACEMENT = CleanUtils.cleanWordsReplacement(MAC_NAB);
-
-	private static final String PARK_AND_RIDE_SHORT = "P&R"; // Park & Ride
-	private static final Pattern PARK_AND_RIDE = CleanUtils.cleanWords("park 'n' ride");
-	private static final String PARK_AND_RIDE_REPLACEMENT = CleanUtils.cleanWordsReplacement(PARK_AND_RIDE_SHORT);
-
-	private static final String POWER_CENTRE_SHORT = "TC"; // Power Center
+	private static final String POWER_CENTRE_SHORT = "PC"; // Power Center
 	private static final Pattern POWER_CENTRE = CleanUtils.cleanWords("power centre", "power center");
 	private static final String POWER_CENTRE_REPLACEMENT = CleanUtils.cleanWordsReplacement(POWER_CENTRE_SHORT);
 
 	private static final String SALTFLEET_SCHOOL_SHORT = "Saltfleet HS"; // Saltfleet High School
 	private static final Pattern SALTFLEET_SCHOOL = CleanUtils.cleanWords("saltfleet high school", "saltfleet school");
 	private static final String SALTFLEET_SCHOOL_REPLACEMENT = CleanUtils.cleanWordsReplacement(SALTFLEET_SCHOOL_SHORT);
-
-	private static final String TRANSIT_CENTRE_SHORT = "TC"; // Transit Center
-	private static final Pattern TRANSIT_CENTRE = CleanUtils.cleanWords("transit centre", "transit center");
-	private static final String TRANSIT_CENTRE_REPLACEMENT = CleanUtils.cleanWordsReplacement(TRANSIT_CENTRE_SHORT);
-
-	private static final String GO = "GO";
-	private static final Pattern GO_ = CleanUtils.cleanWords("go");
-	private static final String GO_REPLACEMENT = CleanUtils.cleanWordsReplacement(GO);
-
-	private static final String TRANSIT_TERMINAL_SHORT = "TT"; // Transit Terminal
-	private static final Pattern TRANSIT_TERMINAL = CleanUtils.cleanWords("transit terminal");
-	private static final String TRANSIT_TERMINAL_REPLACEMENT = CleanUtils.cleanWordsReplacement(TRANSIT_TERMINAL_SHORT);
 
 	private static final String HIGH_SCHOOL_SHORT = "HS"; // High School
 	private static final Pattern HIGH_SCHOOL_ = CleanUtils.cleanWords("high school");
@@ -239,13 +219,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = COMMUNITY_CENTRE.matcher(tripHeadsign).replaceAll(COMMUNITY_CENTRE_REPLACEMENT);
 		tripHeadsign = HAMILTON_AIRPORT.matcher(tripHeadsign).replaceAll(HAMILTON_AIRPORT_REPLACEMENT);
 		tripHeadsign = HAMILTON_WATERFRONT.matcher(tripHeadsign).replaceAll(HAMILTON_WATERFRONT_REPLACEMENT);
-		tripHeadsign = MAC_NAB_LC.matcher(tripHeadsign).replaceAll(MAC_NAB_LC_REPLACEMENT);
-		tripHeadsign = PARK_AND_RIDE.matcher(tripHeadsign).replaceAll(PARK_AND_RIDE_REPLACEMENT);
 		tripHeadsign = POWER_CENTRE.matcher(tripHeadsign).replaceAll(POWER_CENTRE_REPLACEMENT);
 		tripHeadsign = SALTFLEET_SCHOOL.matcher(tripHeadsign).replaceAll(SALTFLEET_SCHOOL_REPLACEMENT);
-		tripHeadsign = TRANSIT_CENTRE.matcher(tripHeadsign).replaceAll(TRANSIT_CENTRE_REPLACEMENT);
-		tripHeadsign = TRANSIT_TERMINAL.matcher(tripHeadsign).replaceAll(TRANSIT_TERMINAL_REPLACEMENT);
-		tripHeadsign = GO_.matcher(tripHeadsign).replaceAll(GO_REPLACEMENT);
 		tripHeadsign = GREENE_.matcher(tripHeadsign).replaceAll(GREENE_REPLACEMENT);
 		tripHeadsign = HERITAGE_.matcher(tripHeadsign).replaceAll(HERITAGE_REPLACEMENT);
 		tripHeadsign = HIGH_SCHOOL_.matcher(tripHeadsign).replaceAll(HIGH_SCHOOL_REPLACEMENT);
@@ -253,6 +228,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		tripHeadsign = CleanUtils.CLEAN_AT.matcher(tripHeadsign).replaceAll(CleanUtils.CLEAN_AT_REPLACEMENT);
 		tripHeadsign = CleanUtils.CLEAN_AND.matcher(tripHeadsign).replaceAll(CleanUtils.CLEAN_AND_REPLACEMENT);
 		tripHeadsign = CleanUtils.SAINT.matcher(tripHeadsign).replaceAll(CleanUtils.SAINT_REPLACEMENT);
+		tripHeadsign = CleanUtils.fixMcXCase(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanStreetTypes(tripHeadsign);
 		tripHeadsign = CleanUtils.cleanNumbers(tripHeadsign);
 		return CleanUtils.cleanLabel(tripHeadsign);
@@ -260,20 +236,16 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	private String[] getIgnoredWords() {
 		return new String[]{
-				"CC", "GO", "P&R", "TC",
+				"CC", "GO", "P&R", "TC", "VIA",
 		};
 	}
-
-	private static final Pattern PLATFORM_ = CleanUtils.cleanWords("platform");
-	private static final String PLATFORM_REPLACEMENT = CleanUtils.cleanWordsReplacement("P");
 
 	@NotNull
 	@Override
 	public String cleanStopName(@NotNull String gStopName) {
 		gStopName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, gStopName, getIgnoredWords());
-		gStopName = GO_.matcher(gStopName).replaceAll(GO_REPLACEMENT);
-		gStopName = PLATFORM_.matcher(gStopName).replaceAll(PLATFORM_REPLACEMENT);
 		gStopName = CleanUtils.CLEAN_AT.matcher(gStopName).replaceAll(CleanUtils.CLEAN_AT_REPLACEMENT);
+		gStopName = CleanUtils.fixMcXCase(gStopName);
 		gStopName = CleanUtils.cleanStreetTypes(gStopName);
 		gStopName = CleanUtils.cleanNumbers(gStopName);
 		return CleanUtils.cleanLabel(gStopName);
