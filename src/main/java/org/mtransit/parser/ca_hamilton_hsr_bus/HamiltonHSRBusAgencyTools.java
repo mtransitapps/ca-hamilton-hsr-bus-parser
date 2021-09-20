@@ -7,14 +7,14 @@ import org.mtransit.commons.CleanUtils;
 import org.mtransit.commons.StringUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
-import org.mtransit.parser.gtfs.data.GRoute;
 import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.mt.data.MAgency;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import static org.mtransit.parser.StringUtils.EMPTY;
+import static org.mtransit.commons.StringUtils.EMPTY;
 
 // https://www.hamilton.ca/city-initiatives/strategies-actions/open-data-program
 // https://googlehsr.hamilton.ca/latest/google_transit.zip
@@ -34,6 +34,12 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return true;
 	}
 
+	@Nullable
+	@Override
+	public List<Locale> getSupportedLanguages() {
+		return LANG_EN;
+	}
+
 	@NotNull
 	@Override
 	public Integer getAgencyRouteType() {
@@ -41,21 +47,38 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	}
 
 	@Override
-	public long getRouteId(@NotNull GRoute gRoute) {
-		if (!CharUtils.isDigitsOnly(gRoute.getRouteShortName())) {
-			//noinspection deprecation
-			return Long.parseLong(gRoute.getRouteId()); // good enough
-		}
-		return Long.parseLong(gRoute.getRouteShortName());
+	public boolean defaultRouteIdEnabled() {
+		return true;
+	}
+
+	@Override
+	public boolean useRouteShortNameForRouteId() {
+		return true;
 	}
 
 	@Nullable
 	@Override
-	public String getRouteShortName(@NotNull GRoute gRoute) {
-		if (CharUtils.isDigitsOnly(gRoute.getRouteShortName())) {
-			return String.valueOf(Integer.valueOf(gRoute.getRouteShortName()));
+	public Long convertRouteIdFromShortNameNotSupported(@NotNull String routeShortName) {
+		if ("ROCKTON".equalsIgnoreCase(routeShortName)) {
+			return 4528L;
+		} else if ("TC".equalsIgnoreCase(routeShortName)) {
+			return 4531L;
 		}
-		return super.getRouteShortName(gRoute);
+		return super.convertRouteIdFromShortNameNotSupported(routeShortName);
+	}
+
+	private static final Pattern STARTS_WITH_0_ = Pattern.compile("(^0*)");
+
+	@NotNull
+	@Override
+	public String cleanRouteShortName(@NotNull String routeShortName) {
+		routeShortName = STARTS_WITH_0_.matcher(routeShortName).replaceAll(EMPTY);
+		return super.cleanRouteShortName(routeShortName);
+	}
+
+	@Override
+	public boolean defaultRouteLongNameEnabled() {
+		return true;
 	}
 
 	@NotNull
@@ -63,6 +86,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	public String cleanRouteLongName(@NotNull String routeLongName) {
 		routeLongName = CleanUtils.toLowerCaseUpperCaseWords(Locale.ENGLISH, routeLongName, getIgnoredWords());
 		return super.cleanRouteLongName(routeLongName);
+	}
+
+	@Override
+	public boolean defaultAgencyColorEnabled() {
+		return true;
 	}
 
 	private static final String AGENCY_COLOR = "F4CB0B"; // YELLOW (flag)
