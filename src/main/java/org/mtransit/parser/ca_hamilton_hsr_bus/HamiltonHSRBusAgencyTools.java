@@ -63,6 +63,8 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			return 4528L;
 		} else if ("TC".equalsIgnoreCase(routeShortName)) {
 			return 4531L;
+		} else if ("SHER".equalsIgnoreCase(routeShortName)) {
+			return 4530L;
 		}
 		return super.convertRouteIdFromShortNameNotSupported(routeShortName);
 	}
