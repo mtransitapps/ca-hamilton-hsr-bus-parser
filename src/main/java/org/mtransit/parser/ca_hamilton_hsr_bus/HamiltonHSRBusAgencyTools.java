@@ -77,12 +77,24 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return super.convertRouteIdFromShortNameNotSupported(routeShortName);
 	}
 
+	@Nullable
+	@Override
+	public Long convertRouteIdPreviousChars(@NotNull String previousChars) {
+		if ("TC".equalsIgnoreCase(previousChars)) {
+			return 99_000L;
+		}
+		return null;
+	}
+
 	private static final Pattern STARTS_WITH_0_ = Pattern.compile("(^0*)");
+
+	private static final Pattern DASH_ = Pattern.compile("(\\-+)");
 
 	@NotNull
 	@Override
 	public String cleanRouteShortName(@NotNull String routeShortName) {
 		routeShortName = STARTS_WITH_0_.matcher(routeShortName).replaceAll(EMPTY);
+		routeShortName = DASH_.matcher(routeShortName).replaceAll(EMPTY);
 		return super.cleanRouteShortName(routeShortName);
 	}
 
