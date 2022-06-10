@@ -16,8 +16,7 @@ import java.util.regex.Pattern;
 
 import static org.mtransit.commons.StringUtils.EMPTY;
 
-// https://www.hamilton.ca/city-initiatives/strategies-actions/open-data-program
-// https://googlehsr.hamilton.ca/latest/google_transit.zip
+// https://open.hamilton.ca/documents/6eeccf172c824c2db0484aea54ed7fe4/about
 public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	public static void main(@NotNull String[] args) {
