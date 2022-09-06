@@ -59,7 +59,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 	@Override
 	public Long convertRouteIdFromShortNameNotSupported(@NotNull String routeShortName) {
 		if ("ROCKTON".equalsIgnoreCase(routeShortName)) {
-			return 4528L;
+			return 4853L;
 		} else if ("TC".equalsIgnoreCase(routeShortName)) {
 			return 4531L;
 		} else if ("SHER".equalsIgnoreCase(routeShortName)) {
@@ -78,6 +78,10 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 			return 4863L;
 		} else if ("myRide".equalsIgnoreCase(routeShortName)) {
 			return 4620L;
+		} else if ("BINFAIR".equalsIgnoreCase(routeShortName)) {
+			return 4850L;
+		} else if ("ANCFAIR".equalsIgnoreCase(routeShortName)) {
+			return 4849L;
 		}
 		return super.convertRouteIdFromShortNameNotSupported(routeShortName);
 	}
