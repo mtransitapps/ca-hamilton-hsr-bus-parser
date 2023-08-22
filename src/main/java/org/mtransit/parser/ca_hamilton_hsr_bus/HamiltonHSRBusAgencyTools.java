@@ -97,7 +97,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	private static final Pattern STARTS_WITH_0_ = Pattern.compile("(^0*)");
 
-	private static final Pattern DASH_ = Pattern.compile("(\\-+)");
+	private static final Pattern DASH_ = Pattern.compile("(-+)");
 
 	@NotNull
 	@Override
@@ -137,7 +137,7 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		return true;
 	}
 
-	private static final Pattern STARTS_WITH_RSN_LETTER = Pattern.compile("(^[\\d]+[a-z] )", Pattern.CASE_INSENSITIVE);
+	private static final Pattern STARTS_WITH_RSN_LETTER = Pattern.compile("(^\\d+[a-z] )", Pattern.CASE_INSENSITIVE);
 
 	@Nullable
 	@Override
