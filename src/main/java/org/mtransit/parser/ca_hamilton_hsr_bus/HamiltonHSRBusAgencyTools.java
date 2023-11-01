@@ -1,5 +1,7 @@
 package org.mtransit.parser.ca_hamilton_hsr_bus;
 
+import static org.mtransit.commons.StringUtils.EMPTY;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mtransit.commons.CharUtils;
@@ -7,14 +9,13 @@ import org.mtransit.commons.CleanUtils;
 import org.mtransit.commons.StringUtils;
 import org.mtransit.parser.DefaultAgencyTools;
 import org.mtransit.parser.MTLog;
+import org.mtransit.parser.gtfs.data.GRoute;
 import org.mtransit.parser.gtfs.data.GStop;
 import org.mtransit.parser.mt.data.MAgency;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
-
-import static org.mtransit.commons.StringUtils.EMPTY;
 
 // https://open.hamilton.ca/documents/6eeccf172c824c2db0484aea54ed7fe4/about
 public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
@@ -52,7 +53,12 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 
 	@Override
 	public boolean useRouteShortNameForRouteId() {
-		return true;
+		return false; // used by GTFS-RT
+	}
+
+	@Override
+	public long getRouteId(@NotNull GRoute gRoute) {
+		return super.getRouteId(gRoute); // used by GTFS-RT
 	}
 
 	@Nullable
@@ -219,11 +225,11 @@ public class HamiltonHSRBusAgencyTools extends DefaultAgencyTools {
 		String stopId = gStop.getStopId();
 		if (stopId.length() > 0) {
 			if (CharUtils.isDigitsOnly(stopId)) {
-				return Integer.parseInt(stopId);
+				return Integer.parseInt(stopId); // used by GTFS-RT
 			}
 			stopId = CleanUtils.cleanMergedID(stopId);
 			if (CharUtils.isDigitsOnly(stopId)) {
-				return Integer.parseInt(stopId);
+				return Integer.parseInt(stopId); // used by GTFS-RT
 			}
 		}
 		throw new MTLog.Fatal("Unexpected stop ID for %s!", gStop);
